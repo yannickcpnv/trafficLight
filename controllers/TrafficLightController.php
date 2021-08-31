@@ -2,14 +2,26 @@
 
 namespace TrafficLight\Controllers;
 
+require 'models/TrafficLight.php';
+
 use TrafficLight\Models\TrafficLight;
 
 class TrafficLightController
 {
 
-    public function getHomePage()
+    public function next()
     {
         $trafficLight = new TrafficLight();
-        require 'views/view.php';
+        if (isset($_SESSION['l-sequence'])) {
+            $trafficLight->setLightState($_SESSION['l-sequence']);
+        }
+        $trafficLight->nextState();
+        $_SESSION['l-sequence'] = $trafficLight->getLightState();
+
+        require 'views/home.php';
+    }
+
+    public function oos()
+    {
     }
 }

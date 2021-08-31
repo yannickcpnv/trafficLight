@@ -1,14 +1,19 @@
 <?php
 
-namespace TrafficLight\Controllers;
+use TrafficLight\Controllers\TrafficLightController;
+
+session_start();
+require 'controllers/TrafficLightController.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-session_start();
-
-$sessionController = new SessionController();
-$sessionController->createSession();
-
 $trafficLightController = new TrafficLightController();
-$trafficLightController->getHomePage();
+$action = $_GET['action'] ?? null;
+
+switch ($action) {
+    case 'next':
+    default:
+        $trafficLightController->next();
+        break;
+}

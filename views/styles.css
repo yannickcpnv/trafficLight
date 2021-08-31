@@ -1,0 +1,22 @@
+.dot {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  display: block;
+}
+
+.off {
+  background-color: #bbb;
+}
+
+.l-red {
+  background-color: red;
+}
+
+.l-yellow {
+  background-color: yellow;
+}
+
+.l-green {
+  background-color: green;
+}

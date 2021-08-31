@@ -2,13 +2,16 @@
 
 namespace TrafficLight\Models;
 
+require 'models/LightState.php';
+require 'models/LampState.php';
+
 class TrafficLight
 {
 
     //region Fields
     private int $red;
-    private int $green;
     private int $yellow;
+    private int $green;
     private int $lightState;
     //endregion
 
@@ -16,14 +19,13 @@ class TrafficLight
     public function __construct()
     {
         $this->red = 0;
-        $this->green = 0;
         $this->yellow = 2;
-        $this->lightState = LightState::HS;
+        $this->green = 0;
+        $this->lightState = LightState::OOS;
     }
     //endregion
 
     //region Accessors
-
     /**
      * @return int
      */
@@ -43,22 +45,6 @@ class TrafficLight
     /**
      * @return mixed
      */
-    public function getGreen(): int
-    {
-        return $this->green;
-    }
-
-    /**
-     * @param mixed $green
-     */
-    public function setGreen(int $green)
-    {
-        $this->green = $green;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getYellow(): int
     {
         return $this->yellow;
@@ -73,6 +59,22 @@ class TrafficLight
     }
 
     /**
+     * @return mixed
+     */
+    public function getGreen(): int
+    {
+        return $this->green;
+    }
+
+    /**
+     * @param mixed $green
+     */
+    public function setGreen(int $green)
+    {
+        $this->green = $green;
+    }
+
+    /**
      * @return int
      */
     public function getLightState(): int
@@ -80,12 +82,64 @@ class TrafficLight
         return $this->lightState;
     }
 
+    //endregion
+
     /**
      * @param int $lightState
      */
     public function setLightState(int $lightState): void
     {
         $this->lightState = $lightState;
+
+        switch ($this->lightState) {
+            case LightState::STOP:
+                $this->red = LampState::ON;
+                $this->yellow = LampState::OFF;
+                $this->green = LampState::OFF;
+                break;
+            case LightState::PREPARATION:
+                $this->red = LampState::ON;
+                $this->yellow = LampState::ON;
+                $this->green = LampState::OFF;
+                break;
+            case LightState::CIRCULATE:
+                $this->red = LampState::OFF;
+                $this->yellow = LampState::OFF;
+                $this->green = LampState::ON;
+                break;
+            case LightState::WARNING:
+                $this->red = LampState::OFF;
+                $this->yellow = LampState::ON;
+                $this->green = LampState::OFF;
+                break;
+            case LightState::OOS:
+            default:
+                $this->red = LampState::OFF;
+                $this->yellow = LampState::OOS;
+                $this->green = LampState::OFF;
+                break;
+        }
     }
-    //endregion
+
+    /**
+     * Change to the next light state.
+     */
+    public function nextState()
+    {
+        switch ($this->lightState) {
+            case LightState::STOP:
+                $this->setLightState(LightState::PREPARATION);
+                break;
+            case LightState::PREPARATION:
+                $this->setLightState(LightState::CIRCULATE);
+                break;
+            case LightState::CIRCULATE:
+                $this->setLightState(LightState::WARNING);
+                break;
+            case LightState::WARNING:
+            case LightState::OOS:
+                $this->setLightState(LightState::STOP);
+                break;
+        }
+    }
 }
