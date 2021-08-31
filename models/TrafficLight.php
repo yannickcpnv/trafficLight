@@ -1,5 +1,7 @@
 <?php
 
+namespace TrafficLight\Models;
+
 class TrafficLight
 {
 
@@ -7,6 +9,7 @@ class TrafficLight
     private int $red;
     private int $green;
     private int $yellow;
+    private int $lightState;
     //endregion
 
     //region Constructors
@@ -15,6 +18,7 @@ class TrafficLight
         $this->red = 0;
         $this->green = 0;
         $this->yellow = 2;
+        $this->lightState = LightState::HS;
     }
     //endregion
 
@@ -66,6 +70,22 @@ class TrafficLight
     public function setYellow(int $yellow)
     {
         $this->yellow = $yellow;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLightState(): int
+    {
+        return $this->lightState;
+    }
+
+    /**
+     * @param int $lightState
+     */
+    public function setLightState(int $lightState): void
+    {
+        $this->lightState = $lightState;
     }
     //endregion
 }

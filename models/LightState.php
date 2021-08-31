@@ -1,5 +1,7 @@
 <?php
 
+namespace TrafficLight\Models;
+
 class LightState
 {
 
