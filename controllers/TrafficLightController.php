@@ -9,19 +9,31 @@ use TrafficLight\Models\TrafficLight;
 class TrafficLightController
 {
 
+    private TrafficLight $trafficLight;
+
+    /**
+     * @param TrafficLight $trafficLight
+     */
+    public function __construct(TrafficLight $trafficLight) { $this->trafficLight = $trafficLight; }
+
+    /**
+     * Change light to next state.
+     */
     public function next()
     {
-        $trafficLight = new TrafficLight();
-        if (isset($_SESSION['l-sequence'])) {
-            $trafficLight->setLightState($_SESSION['l-sequence']);
-        }
-        $trafficLight->nextState();
-        $_SESSION['l-sequence'] = $trafficLight->getLightState();
+        $this->trafficLight->nextState();
+        $_GET['l-sequence'] = $this->trafficLight->getLightState();
 
         require 'views/home.php';
     }
 
+    /**
+     * Change light to OOS state.
+     */
     public function oos()
     {
+        $this->trafficLight->stop();
+
+        require 'views/home.php';
     }
 }

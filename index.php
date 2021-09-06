@@ -1,19 +1,26 @@
 <?php
 
+use TrafficLight\Models\LightState;
+use TrafficLight\Models\TrafficLight;
 use TrafficLight\Controllers\TrafficLightController;
 
-session_start();
 require 'controllers/TrafficLightController.php';
 
+// For debugging
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-$trafficLightController = new TrafficLightController();
 $action = $_GET['action'] ?? null;
+$trafficLight = new TrafficLight($_GET['l-sequence'] ?? LightState::STOP);
+$trafficLightController = new TrafficLightController($trafficLight);
 
 switch ($action) {
     case 'next':
-    default:
         $trafficLightController->next();
         break;
+    case 'oos':
+        $trafficLightController->oos();
+        break;
+    default:
+        $trafficLightController->next();
 }

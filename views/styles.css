@@ -1,22 +1,52 @@
+:root {
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #198754;
+  --off: grey;
+}
+
+.light {
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.66);
+  border-radius: 1rem;
+  border: 5px solid;
+}
+
 .dot {
   height: 100px;
   width: 100px;
   border-radius: 50%;
   display: block;
+  border: 5px solid;
+}
+
+.dot:not(:last-child) {
+  margin-bottom: 1rem;
 }
 
 .off {
-  background-color: #bbb;
+  background-color: var(--off);
 }
 
 .l-red {
-  background-color: red;
+  background-color: var(--red);
 }
 
 .l-yellow {
-  background-color: yellow;
+  background-color: var(--yellow);
 }
 
 .l-green {
-  background-color: green;
+  background-color: var(--green);
 }
+
+.blink {
+  animation: blinker 1s infinite;
+}
+@keyframes blinker {
+  0%, 50% { background-color: var(--yellow); }
+  51%, 100% { background-color: grey; }
+}
+
+

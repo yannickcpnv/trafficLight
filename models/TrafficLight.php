@@ -16,12 +16,12 @@ class TrafficLight
     //endregion
 
     //region Constructors
-    public function __construct()
+    public function __construct($lightState)
     {
         $this->red = 0;
         $this->yellow = 2;
         $this->green = 0;
-        $this->lightState = LightState::OOS;
+        $this->lightState = $lightState;
     }
     //endregion
 
@@ -141,5 +141,13 @@ class TrafficLight
                 $this->setLightState(LightState::STOP);
                 break;
         }
+    }
+
+    /**
+     * Set the light to HS.
+     */
+    public function stop()
+    {
+        $this->setLightState(LightState::OOS);
     }
 }
