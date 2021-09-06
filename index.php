@@ -19,8 +19,7 @@ switch ($action) {
         $trafficLightController->next();
         break;
     case 'oos':
+    default:
         $trafficLightController->oos();
         break;
-    default:
-        $trafficLightController->next();
 }
