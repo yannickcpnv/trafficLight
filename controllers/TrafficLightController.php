@@ -22,7 +22,6 @@ class TrafficLightController
     public function next()
     {
         $this->trafficLight->nextState();
-        $_GET['l-sequence'] = $this->trafficLight->getLightState();
 
         require 'views/home.php';
     }

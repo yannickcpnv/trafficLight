@@ -9,10 +9,11 @@ class TrafficLight
 {
 
     //region Fields
-    private int $red;
-    private int $yellow;
-    private int $green;
-    private int $lightState;
+    private int   $red;
+    private int   $yellow;
+    private int   $green;
+    private int   $state;
+    private float $duration;
     //endregion
 
     //region Constructors
@@ -21,7 +22,7 @@ class TrafficLight
         $this->red = 0;
         $this->yellow = 2;
         $this->green = 0;
-        $this->lightState = $lightState;
+        $this->state = $lightState;
     }
     //endregion
 
@@ -29,43 +30,31 @@ class TrafficLight
     /**
      * @return int
      */
-    public function getRed(): int
-    {
-        return $this->red;
-    }
+    public function getRed(): int { return $this->red; }
 
     /**
      * @return mixed
      */
-    public function getYellow(): int
-    {
-        return $this->yellow;
-    }
+    public function getYellow(): int { return $this->yellow; }
 
     /**
      * @return mixed
      */
-    public function getGreen(): int
-    {
-        return $this->green;
-    }
+    public function getGreen(): int { return $this->green; }
 
     /**
      * @return int
      */
-    public function getLightState(): int
-    {
-        return $this->lightState;
-    }
+    public function getState(): int { return $this->state; }
 
     /**
-     * @param int $lightState
+     * @param int $state
      */
-    public function setLightState(int $lightState)
+    public function setState(int $state)
     {
-        $this->lightState = $lightState;
+        $this->state = $state;
 
-        switch ($this->lightState) {
+        switch ($this->state) {
             case LightState::STOP:
                 $this->red = LampState::ON;
                 $this->yellow = LampState::OFF;
@@ -94,6 +83,19 @@ class TrafficLight
                 break;
         }
     }
+
+    public function getDuration(): float
+    {
+        $this->duration = 1000 * match ($this->getState()) {
+                LightState::STOP => 3,
+                LightState::WARNING => 2,
+                LightState::CIRCULATE => 1,
+                LightState::PREPARATION => 1.5,
+                default => 0,
+            };
+
+        return $this->duration;
+    }
     //endregion
 
     //region Methods
@@ -102,19 +104,19 @@ class TrafficLight
      */
     public function nextState()
     {
-        switch ($this->lightState) {
+        switch ($this->state) {
             case LightState::STOP:
-                $this->setLightState(LightState::PREPARATION);
+                $this->setState($this->isHourStoppable() ? LightState::OOS : LightState::PREPARATION);
                 break;
             case LightState::PREPARATION:
-                $this->setLightState(LightState::CIRCULATE);
+                $this->setState(LightState::CIRCULATE);
                 break;
             case LightState::CIRCULATE:
-                $this->setLightState(LightState::WARNING);
+                $this->setState($this->isHourStoppable() ? LightState::OOS : LightState::WARNING);
                 break;
             case LightState::WARNING:
             case LightState::OOS:
-                $this->setLightState(LightState::STOP);
+                $this->setState(LightState::STOP);
                 break;
         }
     }
@@ -122,12 +124,14 @@ class TrafficLight
     /**
      * Set the light to HS.
      */
-    public function stop()
+    public function stop($isManual = null)
     {
-        switch ($this->lightState) {
+        switch ($this->state) {
             case LightState::STOP:
             case LightState::CIRCULATE:
-                $this->setLightState(LightState::OOS);
+                if ($this->isStateStoppable()) {
+                    $this->setState(LightState::OOS);
+                }
                 break;
             default:
                 break;
@@ -139,9 +143,32 @@ class TrafficLight
      *
      * @return bool
      */
-    public function canStop(): bool
+    public function isStateStoppable(): bool
     {
-        return $this->lightState == LightState::STOP || $this->lightState == LightState::CIRCULATE;
+        return $this->state == LightState::STOP || $this->state == LightState::CIRCULATE;
+    }
+
+    /**
+     * Convert to JSON with values needed in javascript.
+     *
+     * @return bool|string
+     */
+    public function toJSON(): bool|string
+    {
+        return json_encode([
+                               'state'           => $this->getState(),
+                               'duration'        => $this->getDuration(),
+                               'isHourStoppable' => $this->isHourStoppable(),
+                           ]);
+    }
+
+    private function isHourStoppable(): bool
+    {
+        $currentTime = strtotime(date('H:i'));
+        $startSlot = strtotime('13:15');
+        $endSlot = strtotime('13:27');
+
+        return $currentTime >= $startSlot && $currentTime <= $endSlot;
     }
     //endregion
 }

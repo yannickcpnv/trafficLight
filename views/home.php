@@ -8,8 +8,10 @@ use TrafficLight\Models\LightState;
 
 ob_start();
 
-$isOOS = $this->trafficLight->getLightState() == LightState::OOS;
+$isOOS = $this->trafficLight->getState() == LightState::OOS;
 ?>
+
+<div id="light-js" data-traffic-light="<?= htmlspecialchars($this->trafficLight->toJSON()) ?>"></div>
 
 <div class="d-flex justify-content-center mt-1">
     <div class="d-flex flex-column">
@@ -28,18 +30,20 @@ $isOOS = $this->trafficLight->getLightState() == LightState::OOS;
             <span class="dot <?= $this->trafficLight->getGreen() == LampState::ON ? 'l-green' : 'off' ?>"></span>
         </div>
 
-        <a
-          class="btn btn-primary align-self-center mb-1"
-          href="/index.php?action=next&l-sequence=<?= $this->trafficLight->getLightState() ?>"
-        >
-            Suivant
-        </a>
-
         <?php
-        if ($this->trafficLight->canStop()): ?>
+        if ($isOOS): ?>
+            <a
+              class="btn btn-primary align-self-center mb-1"
+              href="/index.php?action=next&lastState=<?= LightState::OOS ?>"
+            >
+                Suivant
+            </a>
+        <?php
+        endif;
+        if ($this->trafficLight->isStateStoppable()): ?>
             <a
               class="btn btn-warning align-self-center"
-              href="/index.php?action=oos&l-sequence=<?= $this->trafficLight->getLightState() ?>"
+              href="/index.php?action=oos&l-sequence=<?= $this->trafficLight->getState() ?>"
             >
                 Hors service
             </a>

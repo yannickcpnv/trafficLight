@@ -11,7 +11,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 $action = $_GET['action'] ?? null;
-$trafficLight = new TrafficLight($_GET['l-sequence'] ?? LightState::STOP);
+$trafficLight = new TrafficLight($_GET['lastState'] ?? LightState::STOP);
 $trafficLightController = new TrafficLightController($trafficLight);
 
 switch ($action) {
