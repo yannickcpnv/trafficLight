@@ -30,7 +30,7 @@ $isOOS = $this->trafficLight->getLightState() == LightState::OOS;
 
         <a
           class="btn btn-primary align-self-center mb-1"
-          href="index.php?action=next&l-sequence=<?= $this->trafficLight->getLightState() ?>"
+          href="/index.php?action=next&l-sequence=<?= $this->trafficLight->getLightState() ?>"
         >
             Suivant
         </a>
@@ -39,7 +39,7 @@ $isOOS = $this->trafficLight->getLightState() == LightState::OOS;
         if (!$isOOS): ?>
             <a
               class="btn btn-warning align-self-center"
-              href="index.php?action=oos"
+              href="/index.php?action=oos"
             >
                 Hors service
             </a>
@@ -50,5 +50,5 @@ $isOOS = $this->trafficLight->getLightState() == LightState::OOS;
 
 <?php
 $content = ob_get_clean();
-require_once "views/layout.php";
+require_once "views/includes/layout.php";
 ?>
