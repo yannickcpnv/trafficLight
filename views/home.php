@@ -36,10 +36,10 @@ $isOOS = $this->trafficLight->getLightState() == LightState::OOS;
         </a>
 
         <?php
-        if (!$isOOS): ?>
+        if ($this->trafficLight->canStop()): ?>
             <a
               class="btn btn-warning align-self-center"
-              href="/index.php?action=oos"
+              href="/index.php?action=oos&l-sequence=<?= $this->trafficLight->getLightState() ?>"
             >
                 Hors service
             </a>

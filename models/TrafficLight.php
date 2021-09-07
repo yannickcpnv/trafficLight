@@ -35,27 +35,11 @@ class TrafficLight
     }
 
     /**
-     * @param mixed $red
-     */
-    public function setRed(int $red)
-    {
-        $this->red = $red;
-    }
-
-    /**
      * @return mixed
      */
     public function getYellow(): int
     {
         return $this->yellow;
-    }
-
-    /**
-     * @param mixed $yellow
-     */
-    public function setYellow(int $yellow)
-    {
-        $this->yellow = $yellow;
     }
 
     /**
@@ -67,14 +51,6 @@ class TrafficLight
     }
 
     /**
-     * @param mixed $green
-     */
-    public function setGreen(int $green)
-    {
-        $this->green = $green;
-    }
-
-    /**
      * @return int
      */
     public function getLightState(): int
@@ -82,12 +58,10 @@ class TrafficLight
         return $this->lightState;
     }
 
-    //endregion
-
     /**
      * @param int $lightState
      */
-    public function setLightState(int $lightState): void
+    public function setLightState(int $lightState)
     {
         $this->lightState = $lightState;
 
@@ -120,7 +94,9 @@ class TrafficLight
                 break;
         }
     }
+    //endregion
 
+    //region Methods
     /**
      * Change to the next light state.
      */
@@ -148,6 +124,24 @@ class TrafficLight
      */
     public function stop()
     {
-        $this->setLightState(LightState::OOS);
+        switch ($this->lightState) {
+            case LightState::STOP:
+            case LightState::CIRCULATE:
+                $this->setLightState(LightState::OOS);
+                break;
+            default:
+                break;
+        }
     }
+
+    /**
+     * If the state can be OOS.
+     *
+     * @return bool
+     */
+    public function canStop(): bool
+    {
+        return $this->lightState == LightState::STOP || $this->lightState == LightState::CIRCULATE;
+    }
+    //endregion
 }
