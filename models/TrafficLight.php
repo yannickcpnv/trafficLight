@@ -159,6 +159,7 @@ class TrafficLight
                                'state'           => $this->getState(),
                                'duration'        => $this->getDuration(),
                                'isHourStoppable' => $this->isHourStoppable(),
+                               'timeBeforeReloading' => $this,
                            ]);
     }
 

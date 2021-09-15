@@ -5,6 +5,7 @@
  * @param trafficLight.state
  * @param trafficLight.duration
  * @param trafficLight.isHourStoppable
+ * @param trafficLight.timeBeforeReloading
  *
  * @type {any}
  */
